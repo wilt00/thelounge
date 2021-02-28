@@ -498,7 +498,7 @@ Network.prototype.export = function () {
 			return channel.type === Chan.Type.CHANNEL || channel.type === Chan.Type.QUERY;
 		})
 		.map(function (chan) {
-			const keys = ["name"];
+			const keys = ["name", "options"];
 
 			if (chan.type === Chan.Type.CHANNEL) {
 				keys.push("key");
