@@ -172,10 +172,14 @@ class MessageStorage {
 		// If unlimited history is specified, load 100k messages
 		const limit = Helper.config.maxHistory < 0 ? 100000 : Helper.config.maxHistory;
 
+		const query = `SELECT msg, type, time FROM messages WHERE network = ? AND channel = ? ${
+			channel.options.hideJoinHistory ? 'AND type != "part" AND type != "join"' : ""
+		} ORDER BY time DESC LIMIT ?`;
+
 		return new Promise((resolve, reject) => {
 			this.database.serialize(() =>
 				this.database.all(
-					"SELECT msg, type, time FROM messages WHERE network = ? AND channel = ? ORDER BY time DESC LIMIT ?",
+					query,
 					[network.uuid, channel.name.toLowerCase(), limit],
 					(err, rows) => {
 						if (err) {
